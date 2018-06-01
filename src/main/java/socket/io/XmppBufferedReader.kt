@@ -1,4 +1,4 @@
-package io
+package socket.io
 
 import java.io.BufferedReader
 import java.io.InputStream

@@ -1,9 +1,9 @@
-import io.XmppBufferedReader
-import io.XmppPrintWriter
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.XMPPConnection
-import org.junit.Test
+import socket.io.XmppBufferedReader
+import socket.io.XmppPrintWriter
 import socket.XmppServerSocket
+import org.junit.Test
 
 class e2eTest {
 
@@ -30,11 +30,14 @@ class e2eTest {
     }
 
     @Test
-    fun `test a conversation client side`() {
+    fun `test setup connection`() {
+        val mapper = XmppMapper()
+        mapper.main(arrayOf(""))
+
         val config = ConnectionConfiguration("localhost", 9092)
 
-        config.setSASLAuthenticationEnabled(false)
-        config.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
+        config.isSASLAuthenticationEnabled = false
+        config.securityMode = ConnectionConfiguration.SecurityMode.disabled
 
         val connection = XMPPConnection(config)
         connection.connect()
