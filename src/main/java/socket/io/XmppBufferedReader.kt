@@ -9,5 +9,5 @@ class XmppBufferedReader(inputStream: InputStream) {
     var input = BufferedReader(InputStreamReader(inputStream))
 
     // Waits for an incoming response and returns it
-    fun readResponse() = input.readLines()
+    fun readResponse() = input.readText()
 }
