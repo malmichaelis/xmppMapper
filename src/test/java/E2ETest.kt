@@ -4,6 +4,7 @@ import socket.io.XmppBufferedReader
 import socket.io.XmppPrintWriter
 import socket.XmppServerSocket
 import org.junit.Test
+import kotlin.concurrent.thread
 
 class E2ETest {
 
@@ -17,18 +18,21 @@ class E2ETest {
         println("Client connected to Socket, waiting for authentication message")
 
         var writer = XmppPrintWriter(client.getOutputStream())
-        var reader = XmppBufferedReader(client.getInputStream())
+//        var reader = XmppBufferedReader(client.getInputStream())
 
-        print("Received from Client: ")
-        println(reader.readResponse())
+//        print("Received from Client: ")
+//        println(reader.readResponse())
         println("Sending to Client: <stream:stream from='localhost' id='someid' xmlns=\"jabber:client\" xmlns:stream=\"http://etherx.jabber.org/streams\" version=\"1.0\"></stream:stream>")
-        writer.sendConnectionAcceptance()
+        writer.sendToClient("<stream:stream from='localhost' id='someid' xmlns=\"jabber:client\" xmlns:stream=\"http://etherx.jabber.org/streams\" version=\"1.0\"></stream:stream>")
+        Thread.sleep(1000)
 
-        println("Received from Client: " + reader.readResponse())
+//        println("Received from Client: " + reader.readResponse())
         println("Sending to Client: <success xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\"/>")
-        writer.sendToClient("<success xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\"/>")
+        writer.sendToClient("<a xmlns='http://jabber.org/protocol/ack'/>")
+//        writer.sendToClient("<success xmlns=\"urn:ietf:params:xml:ns:xmpp-sasl\"/>")
 
-        println("Received from Client: " + reader.readResponse())
+        Thread.sleep(1000)
+//        println("Received from Client: " + reader.readResponse())
         println("Sending to Client: <iq type=\"result\"><bind xmlns=\"urn:ietf:params:xml:ns:xmpp-bind\"><jid>SENDER_ID@gcm.googleapis.com/RESOURCE</jid></bind></iq>")
         writer.sendToClient("<iq type=\"result\"><bind xmlns=\"urn:ietf:params:xml:ns:xmpp-bind\"><jid>SENDER_ID@gcm.googleapis.com/RESOURCE</jid></bind></iq>")
     }
